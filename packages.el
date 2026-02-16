@@ -6,6 +6,10 @@
 
 (package! org-roam)
 (package! org-roam-ui)
+(package! org-superstar)
+(package! org-download)
+(package! openwith)
+
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;; (package! some-package)
