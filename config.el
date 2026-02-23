@@ -55,12 +55,14 @@
                "open"
                '("-a" "VLC" file))
 
-         ;; Images → Preview
-         (list (openwith-make-extension-regexp
-                '("xbm" "pbm" "pgm" "ppm" "pnm"
-                  "png" "gif" "bmp" "tif" "jpeg" "jpg"))
-               "open"
-               '("-a" "Preview" file))
+;; Not included as interferes with org-download
+
+;;         ;; Images → Preview
+;;         (list (openwith-make-extension-regexp
+;;                '("xbm" "pbm" "pgm" "ppm" "pnm"
+;;                  "png" "gif" "bmp" "tif" "jpeg" "jpg"))
+;;               "open"
+;;               '("-a" "Preview" file))
 
          ;; Office docs → ONLYOFFICE
          (list (openwith-make-extension-regexp
@@ -76,6 +78,96 @@
                '("-a" "Preview" file))
          ))
   (openwith-mode 1))
+
+
+
+;;; --- Titus' Refined Agenda Setup (Stable Version) -----------------------------------------
+
+(defun titus/agenda-visual-cleanup ()
+  "Apply a clean, modern visual style to the agenda buffer."
+  (setq-local line-spacing 4)
+  (setq-local mode-line-format nil)
+  (setq-local header-line-format " ")
+  (set-window-margins (selected-window) 4 4))
+
+(add-hook 'org-agenda-finalize-hook #'titus/agenda-visual-cleanup)
+
+(add-hook 'org-agenda-finalize-hook
+          (lambda ()
+            (mixed-pitch-mode 1)
+            (set-face-attribute 'org-agenda-structure nil :height 1.2)))
+
+(setq org-agenda-block-separator nil)
+
+(setq org-agenda-prefix-format
+      '((agenda . "  %?-12t %s")
+        (todo   . "  ")
+        (search . "  ")))
+
+(setq org-agenda-current-time-string "ᐊ┈┈┈┈┈┈┈ Now")
+
+(setq org-agenda-time-grid
+      '((today require-timed)
+        ()
+        "    "
+        "┈┈┈┈┈┈┈┈┈┈┈"))
+
+(add-hook 'org-agenda-mode-hook (lambda () (doom-modeline-mode -1)))
+
+(add-to-list 'default-frame-alist '(internal-border-width . 12))
+(set-frame-parameter nil 'alpha-background 94)
+
+(with-eval-after-load 'org-agenda
+  (set-face-attribute 'org-agenda-date nil
+                      :weight 'bold
+                      :foreground nil)
+  (set-face-attribute 'org-agenda-date-today nil
+                      :weight 'bold
+                      :underline t
+                      :foreground nil)
+  (set-face-attribute 'org-agenda-current-time nil
+                      :foreground "yellow"
+                      :weight 'bold))
+
+(with-eval-after-load 'org
+  (add-to-list 'org-todo-keyword-faces
+               '("PROJ" . (:foreground "orange" :weight bold))))
+
+;; --------------------------------------------------------------------------
+;; Custom Agenda Command (Schedule + Do Today + Projects)
+;; --------------------------------------------------------------------------
+
+(setq org-agenda-custom-commands
+      '(("a" "Titus Agenda"
+         (
+          ;; 🕒 Schedule
+          (agenda ""
+                  ((org-agenda-span 5)
+                   (org-agenda-start-day "+0d")
+                   (org-agenda-overriding-header "🕒 Schedule")
+                   (org-agenda-remove-tags t)
+                   (org-agenda-skip-scheduled-if-done t)
+                   (org-agenda-skip-deadline-if-done t)))
+
+          ;; ⚡ Do Today
+          (todo "TODO"
+                ((org-agenda-overriding-header "\n⚡ Do Today")
+                 (org-agenda-remove-tags t)
+                 (org-agenda-skip-function
+                  '(org-agenda-skip-entry-if 'timestamp 'scheduled))))
+
+          ;; 📚 Projects
+          (todo "PROJ"
+                ((org-agenda-overriding-header "\n📚 Projects")
+                 (org-agenda-remove-tags t)
+                 (org-tags-match-list-sublevels nil)))))))
+
+
+
+
+
+
+
 
 
 
