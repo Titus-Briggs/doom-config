@@ -1,6 +1,4 @@
 
-
-
 (setq doom-theme 'doom-one)
 (setq org-directory "~/org-roam/")
 
@@ -81,7 +79,7 @@
 
 
 
-;;; --- Titus' Refined Agenda Setup (Stable Version) -----------------------------------------
+;; ===== AGENDA SETUP =====
 
 (defun titus/agenda-visual-cleanup ()
   "Apply a clean, modern visual style to the agenda buffer."
@@ -133,9 +131,7 @@
   (add-to-list 'org-todo-keyword-faces
                '("PROJ" . (:foreground "orange" :weight bold))))
 
-;; --------------------------------------------------------------------------
-;; Custom Agenda Command (Schedule + Do Today + Projects)
-;; --------------------------------------------------------------------------
+;; -----
 
 (setq org-agenda-custom-commands
       '(("a" "Titus Agenda"
@@ -161,8 +157,6 @@
                 ((org-agenda-overriding-header "\n📚 Projects")
                  (org-agenda-remove-tags t)
                  (org-tags-match-list-sublevels nil)))))))
-
-
 
 
 
